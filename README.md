@@ -1,12 +1,12 @@
 # AWT: Transferring Vision-Language Models via Augmentation, Weighting, and Transportation
 
-✨ Welcome to the official repository for "AWT: Transferring Vision-Language Models via Augmentation, Weighting, and Transportation". This work is a collaborative effort by [Yuhan Zhu](https://scholar.google.com/citations?user=ydgR3LgAAAAJ&hl=en), Yuyang Ji, [Zhiyu Zhao](https://scholar.google.com/citations?user=2Ef8Y0IAAAAJ&hl=en), [Gangshan Wu](https://mcg.nju.edu.cn/member/gswu/en/index.html), and [Limin Wang](https://wanglimin.github.io/) from Nanjing University and Shanghai AI Lab.
+✨ Welcome to the official repository for "AWT: Transferring Vision-Language Models via Augmentation, Weighting, and Transportation". This work is a collaborative effort by [Yuhan Zhu](https://scholar.google.com/citations?user=ydgR3LgAAAAJ&hl=en), [Yuyang Ji](https://mcg.nju.edu.cn/), [Zhiyu Zhao](https://scholar.google.com/citations?user=2Ef8Y0IAAAAJ&hl=en), [Gangshan Wu](https://mcg.nju.edu.cn/member/gswu/en/index.html), and [Limin Wang](https://wanglimin.github.io/) from Nanjing University and Shanghai AI Lab.
 
 🔗 Read our paper: [ArXiv](https://arxiv.org/abs/2407.04603) | [NeurIPS 2024](https://neurips.cc/virtual/2024/poster/94677)
 
 ## Overview
 
-🚀 Our work presents AWT, a novel framework designed to adapt pre-trained Vision-Language Models, enhancing their zero-shot capabilities without additional training. AWT can also facilitate few-shot learning when integrated with a multimodal adapter. It achieves state-of-the-art performance across both zero-shot and few-shot image and video classification tasks.
+🚀 Our work presents AWT, an innovative framework for transferring pre-trained Vision-Language Models (VLMs) to downstream tasks. AWT supercharges VLMs' zero-shot capabilities without the need for additional training, and excels in few-shot learning by incorporating a multimodal adapter. AWT sets new benchmark records in both zero-shot and few-shot image and video tasks, achieving state-of-the-art performance.
 
 ![AWT Overview](images/AWT_teaser.png)
 
@@ -52,8 +52,8 @@ Refer to the following guides for setting up datasets:
 cd AWT_zero_shot
 
 # Set data path in `./scripts/pre_extract.sh`
-
-# `dataset_name` is chosen from ['imagenet', , 'oxford_flowers', 'dtd', 'oxford_pets', 'stanford_cars', 'ucf101', 'caltech101', 'food101', 'sun397', 'fgvc_aircraft', 'eurosat', 'caltech256', 'cub', 'birdsnap']
+# `dataset_name` is chosen from:
+# ['imagenet', 'oxford_flowers', 'dtd', 'oxford_pets', 'stanford_cars', 'ucf101', 'caltech101', 'food101', 'sun397', 'fgvc_aircraft', 'eurosat', 'caltech256', 'cub', 'birdsnap']
 
 # Step 1: Extract visual features
 bash ./scripts/pre_extract.sh [dataset_name]
@@ -67,7 +67,8 @@ Note that ImageNet-v2 and ImageNet-A share the same description file as ImageNet
 ```bash
 cd AWT_zero_shot
 
-# `dataset_name` is chosen from ['imagenet_a', 'imagenet_sketch', 'imagenet_r', 'imagenetv2']
+# `dataset_name` is chosen from:
+# ['imagenet_a', 'imagenet_sketch', 'imagenet_r', 'imagenetv2']
 
 # Step 1: Extract visual features
 ./scripts/pre_extract.sh [dataset_name]
