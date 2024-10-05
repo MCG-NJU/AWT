@@ -12,5 +12,7 @@ ftfy
 regex
 wilds==1.2.2
 tabulate
+matplotlib
+openpyxl
 transformers==4.45.1
 sentencepiece==0.2.0

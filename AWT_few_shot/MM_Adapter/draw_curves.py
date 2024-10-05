@@ -4,11 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 LEGEND_FONTSIZE = 12
-X_TITLE_FONTSIZE = 18
-Y_TITLE_FONTSIZE = 18
+X_TITLE_FONTSIZE = 16
+Y_TITLE_FONTSIZE = 16
 TITLE_FONTSIZE = 18
 CLIP_FONTSIZE = 18
 NUM_FONTSIZE = 16
+FIGSIZE = (4.6, 4.0)
 
 save_dir = "fewshot_curves"
 if not os.path.exists(save_dir):
@@ -27,12 +28,12 @@ shots = [1, 2, 4, 8, 16]
 
 COLORS = {
     "zs": "C4",
-    # "cocoop": "#8470FF",
+    "provp": "#FF3E96",
     "ape": "#8470FF",
     "coop": "#4a86e8",
     "plotpp": "C2",
     "promptsrc": "#ff9900",
-    "ours": "C3"
+    "awt": "C3"
 }
 MS = 3
 ALPHA = 1
@@ -43,9 +44,9 @@ average = {
     "coop": np.array([0., 0., 0., 0., 0.]),
     "plotpp": np.array([0., 0., 0., 0., 0.]),
     "promptsrc": np.array([0., 0., 0., 0., 0.]),
-    "ours": np.array([0., 0., 0., 0., 0.]),
-    "ape": np.array([0., 0., 0., 0., 0.])
-    # "cocoop": np.array([0., 0., 0., 0., 0.])
+    "awt": np.array([0., 0., 0., 0., 0.]),
+    "ape": np.array([0., 0., 0., 0., 0.]),
+    "provp": np.array([0., 0., 0., 0., 0.])
 }
 
 for dataset in datasets:
@@ -56,52 +57,47 @@ for dataset in datasets:
     coop = file[dataset][2:7]
     coop = [float(num) for num in coop]
 
-    # cocoop = file[dataset][7:12]
-    # cocoop = [float(num) for num in cocoop]
+    plotpp = file[dataset][7:12]
+    plotpp = [float(num) for num in plotpp]
+
+    promptsrc = file[dataset][12:17]
+    promptsrc = [float(num) for num in promptsrc]
+
+    provp = file[dataset][17:22]
+    provp = [float(num) for num in provp]
+
     ape = file[dataset][22:27]
     ape = [float(num) for num in ape]
 
-    plotpp = file[dataset][12:17]
-    plotpp = [float(num) for num in plotpp]
-
-    promptsrc = file[dataset][17:22]
-    promptsrc = [float(num) for num in promptsrc]
-
-    # ours = file[dataset][22:27]
-    # ours = [float(num) for num in ours]
-    ours = file[dataset][27:32]
-    ours = [float(num) for num in ours]
+    awt = file[dataset][27:32]
+    awt = [float(num) for num in awt]
 
     average["zs"] += zs
     average["coop"] += np.array(coop)
     average["plotpp"] += np.array(plotpp)
     average["promptsrc"] += np.array(promptsrc)
-    average["ours"] += np.array(ours)
-    # average["cocoop"] += np.array(cocoop)
+    average["provp"] += np.array(provp)
     average["ape"] += np.array(ape)
+    average["awt"] += np.array(awt)
 
     # Plot
     values = [zs]
-    # values += cocoop
+    values += provp
     values += ape
     values += coop
     values += plotpp
     values += promptsrc
-    values += ours
+    values += awt
     val_min, val_max = min(values), max(values)
     diff = val_max - val_min
     val_bot = val_min - diff*0.05
     val_top = val_max + diff*0.05
 
-    FIGSIZE = (4.8, 4.0)
-    # fig, ax = plt.subplots() 6.4, 4.8
-    # fig, ax = plt.subplots(figsize=(4.8, 4.8))
     fig, ax = plt.subplots(figsize=FIGSIZE)
 
     ax.set_xticks([0] + shots)
     ax.set_xticklabels([0] + shots)
-    # ax.set_xlabel("Number of labeled training examples per class", fontsize=X_TITLE_FONTSIZE)
-    ax.set_xlabel("Number of labeled training\nexamples per class", fontsize=X_TITLE_FONTSIZE)
+    ax.set_xlabel("# shots per class", fontsize=X_TITLE_FONTSIZE)
     ax.set_ylabel("Top-1 Accuracy (%)", fontsize=Y_TITLE_FONTSIZE)
     ax.grid(axis="x", color="#DCDCDC", linewidth=1)
     ax.axhline(zs, color="#DCDCDC", linewidth=1)
@@ -127,15 +123,6 @@ for dataset in datasets:
         alpha=ALPHA,
         linestyle='--'
     )
-    # ax.plot(
-    #     shots, cocoop,
-    #     marker="s",
-    #     markersize=MS,
-    #     color=COLORS["cocoop"],
-    #     label="CoCoOp",
-    #     alpha=ALPHA,
-    #     linestyle='-.'
-    # )
     ax.plot(
         shots, plotpp,
         marker="s",
@@ -164,13 +151,22 @@ for dataset in datasets:
         linestyle='-.'
     )
     ax.plot(
-        shots, ours,
+        shots, provp,
+        marker="s",
+        markersize=MS,
+        color=COLORS["provp"],
+        label="ProVP-Ref",
+        alpha=ALPHA,
+        linestyle='-.'
+    )
+    ax.plot(
+        shots, awt,
         marker="*",
         markersize=MS*3.5,
-        color=COLORS["ours"],
+        color=COLORS["awt"],
         markerfacecolor='#FFD700',
-        markeredgecolor=COLORS["ours"],
-        label="Ours",
+        markeredgecolor=COLORS["awt"],
+        label="AWT",
         alpha=ALPHA
     )
 
@@ -183,32 +179,30 @@ for dataset in datasets:
 # Plot
 average = {k: v/len(datasets) for k, v in average.items()}
 zs = average["zs"]
-# cocoop = list(average["cocoop"])
+provp = list(average["provp"])
 ape = list(average["ape"])
 coop = list(average["coop"])
 plotpp = list(average["plotpp"])
 promptsrc = list(average["promptsrc"])
-ours = list(average["ours"])
+awt = list(average["awt"])
 
 values = [zs]
-# values += cocoop
+values += provp
 values += ape
 values += coop
 values += plotpp
 values += promptsrc
-values += ours
+values += awt
 val_min, val_max = min(values), max(values)
 diff = val_max - val_min
 val_bot = val_min - diff*0.05
 val_top = val_max + diff*0.05
 
-# fig, ax = plt.subplots(figsize=(4.8, 4.8))
 fig, ax = plt.subplots(figsize=FIGSIZE)
 
 ax.set_xticks([0] + shots)
 ax.set_xticklabels([0] + shots)
-# ax.set_xlabel("Number of labeled training examples per class", fontsize=X_TITLE_FONTSIZE)
-ax.set_xlabel("Number of labeled training\nexamples per class", fontsize=X_TITLE_FONTSIZE)
+ax.set_xlabel("# shots per class", fontsize=X_TITLE_FONTSIZE)
 ax.set_ylabel("Top-1 Accuracy (%)", fontsize=Y_TITLE_FONTSIZE)
 ax.grid(axis="x", color="#DCDCDC", linewidth=1)
 ax.axhline(zs, color="#DCDCDC", linewidth=1)
@@ -233,15 +227,6 @@ ax.plot(
     alpha=ALPHA,
     linestyle='--'
 )
-# ax.plot(
-#     shots, cocoop,
-#     marker="s",
-#     markersize=MS,
-#     color=COLORS["cocoop"],
-#     label="CoCoOp",
-#     alpha=ALPHA,
-#     linestyle='-.'
-# )
 ax.plot(
     shots, plotpp,
     marker="s",
@@ -270,13 +255,22 @@ ax.plot(
     linestyle='-.'
 )
 ax.plot(
-    shots, ours,
+    shots, provp,
+    marker="s",
+    markersize=MS,
+    color=COLORS["provp"],
+    label="ProVP-Ref",
+    alpha=ALPHA,
+    linestyle='-.'
+)
+ax.plot(
+    shots, awt,
     marker="*",
     markersize=MS*3.5,
-    color=COLORS["ours"],
+    color=COLORS["awt"],
     markerfacecolor='#FFD700',
-    markeredgecolor=COLORS["ours"],
-    label="Ours",
+    markeredgecolor=COLORS["awt"],
+    label="AWT",
     alpha=ALPHA
 )
 
